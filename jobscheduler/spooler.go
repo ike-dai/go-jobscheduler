@@ -2,9 +2,6 @@ package jobscheduler
 
 import (
 	"encoding/xml"
-	"fmt"
-	"net/http"
-	"strings"
 )
 
 type Spooler struct {
@@ -59,12 +56,7 @@ type ShowStateInput struct {
 }
 
 func (c *Client) ShowState(params *ShowStateInput) *Answer {
-	buf, _ := xml.MarshalIndent(*params, "", " ")
-	req, _ := http.NewRequest("POST", c.Url, strings.NewReader(string(buf)))
-	resp, err := c.Do(req)
-	if err != nil {
-		fmt.Printf("[ERROR]: Cannot access JobScheduler API: %s \n", err)
-	}
+	resp := c.CallApi(params)
 	spooler := GetSpoolerFromResponseBody(resp)
 	return spooler.Answer
 }
@@ -77,15 +69,7 @@ type ModifyHotFolderInput struct {
 }
 
 func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) *Answer {
-	buf, err := xml.MarshalIndent(*params, "", " ")
-	if err != nil {
-		fmt.Printf("[ERROR]: Parse error: %s \n", err)
-	}
-	req, _ := http.NewRequest("POST", c.Url, strings.NewReader(string(buf)))
-	resp, err := c.Do(req)
-	if err != nil {
-		fmt.Printf("[ERROR]: Cannot access JobScheduler API: %s \n", err)
-	}
+	resp := c.CallApi(params)
 	spooler := GetSpoolerFromResponseBody(resp)
 	return spooler.Answer
 }

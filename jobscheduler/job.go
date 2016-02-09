@@ -1,14 +1,7 @@
 package jobscheduler
 
 import (
-	"bytes"
-	"code.google.com/p/go-charset/charset" //for convert xml charset ISO-8859-1 to UTF-8
-	_ "code.google.com/p/go-charset/data"
 	"encoding/xml"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strings"
 )
 
 type Jobs struct {
@@ -79,14 +72,7 @@ type ShowJobsInput struct {
 }
 
 func (c *Client) StartJob(params *StartJobInput) *Answer {
-
-	buf, _ := xml.MarshalIndent(*params, "", " ")
-	//	spooler := Spooler{}
-	req, _ := http.NewRequest("POST", c.Url, strings.NewReader(string(buf)))
-	resp, err := c.Do(req)
-	if err != nil {
-		fmt.Printf("[ERROR]: Cannot access JobScheduler API: %s \n", err)
-	}
+	resp := c.CallApi(params)
 	spooler := GetSpoolerFromResponseBody(resp)
 	return spooler.Answer
 }
@@ -115,19 +101,4 @@ func (c *Client) ShowJob(path_name string) *JobConf {
 		}
 	}
 	return nil
-}
-
-func GetSpoolerFromResponseBody(resp *http.Response) *Spooler {
-	spooler := Spooler{}
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("[ERROR]: Cannot read response body: %s \n", err)
-	}
-	decoder := xml.NewDecoder(bytes.NewReader(body))
-	decoder.CharsetReader = charset.NewReader
-	err = decoder.Decode(&spooler)
-	if err != nil {
-		fmt.Printf("[ERROR]: Cannot decord response: %s \n", err)
-	}
-	return &spooler
 }
