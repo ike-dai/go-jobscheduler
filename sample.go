@@ -53,13 +53,14 @@ func main() {
 		job := client.ShowJob("/support_test/hogehoge")
 		fmt.Println(job)
 	*/
-	fmt.Println("@@@@@@@@@@@@Modify Job@@@@@@@@@@@@@@@@")
+
+	fmt.Println("@@@@@@@@@@@@Update Job@@@@@@@@@@@@@@@@")
 	job := client.ShowJob("/support_test/hogehoge")
-	script := &jobscheduler.Script{Language: "shell", Script: "echo hoge hoge test"}
+	script := &jobscheduler.Script{Language: "shell", Script: "echo hoge hoge hoge test"}
 	job.Script = script
-	fmt.Println(job.Script)
-	params := &jobscheduler.ModifyHotFolderInput{Folder: "support_test", Job: job}
-	answer := client.ModifyHotFolder(params)
+	answer := client.UpdateJob(job, "support_test")
+	//params := &jobscheduler.ModifyHotFolderInput{Folder: "support_test", Job: job}
+	//answer := client.ModifyHotFolder(params)
 	fmt.Println(answer)
 
 }

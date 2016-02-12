@@ -102,3 +102,8 @@ func (c *Client) ShowJob(path_name string) *JobConf {
 	}
 	return nil
 }
+
+func (c *Client) UpdateJob(job *JobConf, folder string) *Answer {
+	params := &ModifyHotFolderInput{Folder: folder, Job: job}
+	return c.ModifyHotFolder(params)
+}
