@@ -116,7 +116,7 @@ func (c *Client) UpdateJob(job *JobConf, folder string) *Answer {
 }
 
 func (c *Client) ModifyJob(params *ModifyJobInput) *Answer {
-	all_cmd := []string{"stop", "unstop", "start", "wake", "end", "suspend", "continue"}
+	all_cmd := []string{"stop", "unstop", "start", "wake", "end", "suspend", "continue", "remove"}
 	if contains(all_cmd, params.Cmd) {
 		resp := c.CallApi(params)
 		spooler := GetSpoolerFromResponseBody(resp)
@@ -152,5 +152,10 @@ func (c *Client) EndJob(job_name string) *Answer {
 
 func (c *Client) ContinueJob(job_name string) *Answer {
 	params := &ModifyJobInput{Job: job_name, Cmd: "continue"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) RemoveJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "remove"}
 	return c.ModifyJob(params)
 }

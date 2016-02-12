@@ -74,14 +74,17 @@ func main() {
 		answer := client.StopJob("support_test/hogehoge")
 		fmt.Println(answer)
 	*/
-
-	fmt.Println("@@@@@@@@@@@@UnStop Job@@@@@@@@@@@@@@@@")
-	answer := client.UnStopJob("support_test/hogehoge")
-	fmt.Println(answer)
-
+	/*
+		fmt.Println("@@@@@@@@@@@@UnStop Job@@@@@@@@@@@@@@@@")
+		answer := client.UnStopJob("support_test/hogehoge")
+		fmt.Println(answer)
+	*/
 	/*
 		fmt.Println("@@@@@@@@@@@@Suspend Job@@@@@@@@@@@@@@@@")
 		answer := client.SuspendJob("support_test/hogehoge")
 		fmt.Println(answer)
 	*/
+	fmt.Println("@@@@@@@@@@@@Remove Job@@@@@@@@@@@@@@@@")
+	answer := client.RemoveJob("support_test/hogehoge")
+	fmt.Println(answer)
 }
