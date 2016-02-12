@@ -53,14 +53,35 @@ func main() {
 		job := client.ShowJob("/support_test/hogehoge")
 		fmt.Println(job)
 	*/
+	/*
+		fmt.Println("@@@@@@@@@@@@Update Job@@@@@@@@@@@@@@@@")
+		job := client.ShowJob("/support_test/hogehoge")
+		script := &jobscheduler.Script{Language: "shell", Script: "echo hoge hoge hoge test"}
+		job.Script = script
+		answer := client.UpdateJob(job, "support_test")
+		//params := &jobscheduler.ModifyHotFolderInput{Folder: "support_test", Job: job}
+		//answer := client.ModifyHotFolder(params)
+		fmt.Println(answer)
+	*/
+	/*
+		fmt.Println("@@@@@@@@@@@@Modify Job@@@@@@@@@@@@@@@@")
+		params := &jobscheduler.ModifyJobInput{Job: "support_test/hogehoge", Cmd: "suspend"}
+		answer := client.ModifyJob(params)
+		fmt.Println(answer)
+	*/
+	/*
+		fmt.Println("@@@@@@@@@@@@Stop Job@@@@@@@@@@@@@@@@")
+		answer := client.StopJob("support_test/hogehoge")
+		fmt.Println(answer)
+	*/
 
-	fmt.Println("@@@@@@@@@@@@Update Job@@@@@@@@@@@@@@@@")
-	job := client.ShowJob("/support_test/hogehoge")
-	script := &jobscheduler.Script{Language: "shell", Script: "echo hoge hoge hoge test"}
-	job.Script = script
-	answer := client.UpdateJob(job, "support_test")
-	//params := &jobscheduler.ModifyHotFolderInput{Folder: "support_test", Job: job}
-	//answer := client.ModifyHotFolder(params)
+	fmt.Println("@@@@@@@@@@@@UnStop Job@@@@@@@@@@@@@@@@")
+	answer := client.UnStopJob("support_test/hogehoge")
 	fmt.Println(answer)
 
+	/*
+		fmt.Println("@@@@@@@@@@@@Suspend Job@@@@@@@@@@@@@@@@")
+		answer := client.SuspendJob("support_test/hogehoge")
+		fmt.Println(answer)
+	*/
 }

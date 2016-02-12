@@ -67,6 +67,13 @@ type StartJobInput struct {
 	//Environment *Environment `xml:"environment,omitempty"` //omitempty valid to struct pointer
 	//Params      *Params      `xml:"params,omitempty"`
 }
+
+type ModifyJobInput struct {
+	XMLName xml.Name `xml:"modify_job"`
+	Job     string   `xml:"job,attr"`
+	Cmd     string   `xml:"cmd,attr"`
+}
+
 type ShowJobsInput struct {
 	XMLName xml.Name `xml:"start_job"`
 }
@@ -106,4 +113,44 @@ func (c *Client) ShowJob(path_name string) *JobConf {
 func (c *Client) UpdateJob(job *JobConf, folder string) *Answer {
 	params := &ModifyHotFolderInput{Folder: folder, Job: job}
 	return c.ModifyHotFolder(params)
+}
+
+func (c *Client) ModifyJob(params *ModifyJobInput) *Answer {
+	all_cmd := []string{"stop", "unstop", "start", "wake", "end", "suspend", "continue"}
+	if contains(all_cmd, params.Cmd) {
+		resp := c.CallApi(params)
+		spooler := GetSpoolerFromResponseBody(resp)
+		return spooler.Answer
+	}
+	return nil
+}
+
+func (c *Client) StopJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "stop"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) UnStopJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "unstop"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) SuspendJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "suspend"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) WakeJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "wake"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) EndJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "end"}
+	return c.ModifyJob(params)
+}
+
+func (c *Client) ContinueJob(job_name string) *Answer {
+	params := &ModifyJobInput{Job: job_name, Cmd: "continue"}
+	return c.ModifyJob(params)
 }

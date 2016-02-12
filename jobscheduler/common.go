@@ -36,3 +36,12 @@ func (c *Client) CallApi(params interface{}) *http.Response {
 	}
 	return resp
 }
+
+func contains(elements []string, input string) bool {
+	for _, element := range elements {
+		if input == element {
+			return true
+		}
+	}
+	return false
+}
