@@ -1,15 +1,16 @@
 package main
 
 import (
-	"./jobscheduler"
 	"flag"
 	"fmt"
+	"github.com/ike-dai/go-jobscheduler/jobscheduler"
 )
 
 func main() {
 	var joc_url string
 	flag.StringVar(&joc_url, "u", "http://localhost:4444/", "Please input JOC URL")
 	flag.StringVar(&joc_url, "url", "http://localhost:4444/", "Please input JOC URL")
+	flag.Parse()
 
 	fmt.Println(joc_url)
 
@@ -71,9 +72,10 @@ func main() {
 	*/
 	/*
 		fmt.Println("@@@@@@@@@@@@Stop Job@@@@@@@@@@@@@@@@")
-		answer := client.StopJob("support_test/hogehoge")
+		answer := client.StopJob("test/standalone_job")
 		fmt.Println(answer)
 	*/
+
 	/*
 		fmt.Println("@@@@@@@@@@@@UnStop Job@@@@@@@@@@@@@@@@")
 		answer := client.UnStopJob("support_test/hogehoge")
@@ -84,7 +86,19 @@ func main() {
 		answer := client.SuspendJob("support_test/hogehoge")
 		fmt.Println(answer)
 	*/
-	fmt.Println("@@@@@@@@@@@@Remove Job@@@@@@@@@@@@@@@@")
-	answer := client.RemoveJob("support_test/hogehoge")
-	fmt.Println(answer)
+	/*
+		fmt.Println("@@@@@@@@@@@@Remove Job@@@@@@@@@@@@@@@@")
+		answer := client.RemoveJob("support_test/hogehoge")
+		fmt.Println(answer)
+	*/
+	fmt.Println("@@@@@@@@@@@@Show State@@@@@@@@@@@@@@@@")
+	params := &jobscheduler.ShowStateInput{What: "job_chains"}
+	answer := client.ShowState(params)
+	fmt.Println(answer.State)
+	for _, job_chain := range answer.State.JobChains.JobChain {
+		fmt.Println(job_chain.Name)
+		for _, job_chain_node := range job_chain.JobChainNodes {
+			fmt.Printf("---%s\n", job_chain_node.State)
+		}
+	}
 }

@@ -27,15 +27,15 @@ type Error struct {
 }
 
 type State struct {
-	XMLName    xml.Name `xml:"state"`
-	ConfigFile string   `xml:"config_file,attr"`
-	Db         string   `xml:"db,attr"`
-	DbWaiting  string   `xml:"db_waiting,attr"`
-	Id         string   `xml:"id,attr"`
-	LogFile    string   `xml:"log_file,attr"`
-	Loop       string   `xml:"loop,attr"`
-	Jobs       *Jobs    `xml:"jobs,omitempty"`
-	//JobChains      JobChains      `xml:"job_chains,omitempty"`
+	XMLName    xml.Name   `xml:"state"`
+	ConfigFile string     `xml:"config_file,attr"`
+	Db         string     `xml:"db,attr"`
+	DbWaiting  string     `xml:"db_waiting,attr"`
+	Id         string     `xml:"id,attr"`
+	LogFile    string     `xml:"log_file,attr"`
+	Loop       string     `xml:"loop,attr"`
+	Jobs       *Jobs      `xml:"jobs,omitempty"`
+	JobChains  *JobChains `xml:"job_chains,omitempty"`
 	//ProcessClasses ProcessClasses `xml:"process_classes,omitempty"`
 }
 
