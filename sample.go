@@ -92,9 +92,8 @@ func main() {
 		fmt.Println(answer)
 	*/
 	fmt.Println("@@@@@@@@@@@@Show State@@@@@@@@@@@@@@@@")
-	params := &jobscheduler.ShowStateInput{What: "job_chains"}
-	answer := client.ShowState(params)
-	fmt.Println(answer.State)
+	//params := &jobscheduler.ShowStateInput{What: "job_chain_jobs"}
+	answer := client.ShowJobChains()
 	for _, job_chain := range answer.State.JobChains.JobChain {
 		fmt.Println(job_chain.Name)
 		for _, job_chain_node := range job_chain.JobChainNodes {

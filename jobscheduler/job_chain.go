@@ -43,3 +43,8 @@ type OrderQueue struct {
 	Length        string   `xml:"length,attr"`
 	NextStartTime string   `xml:"next_start_time,attr"`
 }
+
+func (c *Client) ShowJobChains() *Answer {
+	params := &ShowStateInput{What: "job_chains"}
+	return c.ShowState(params)
+}
