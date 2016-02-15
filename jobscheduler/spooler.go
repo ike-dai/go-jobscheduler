@@ -10,10 +10,11 @@ type Spooler struct {
 }
 
 type Answer struct {
-	XMLName xml.Name `xml:"answer"`
-	Ok      *Ok      `xml:"ok,omitempty"`
-	Error   *Error   `xml:"ERROR,omitempty"`
-	State   *State   `xml:"state,omitempty"`
+	XMLName  xml.Name  `xml:"answer"`
+	Ok       *Ok       `xml:"ok,omitempty"`
+	Error    *Error    `xml:"ERROR,omitempty"`
+	State    *State    `xml:"state,omitempty"`
+	JobChain *JobChain `xml:"job_chain,omitempty"`
 }
 type Ok struct {
 	XMLName xml.Name `xml:"ok"`

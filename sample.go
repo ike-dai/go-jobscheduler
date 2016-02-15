@@ -137,10 +137,15 @@ func main() {
 		answer := client.ModifyHotFolder(params3)
 		fmt.Println(answer)
 	*/
-
-	fmt.Println("@@@@@@@@@@@@Remove JobChain@@@@@@@@@@@@@@@@")
-	params := &jobscheduler.RemoveJobChainInput{JobChain: "test/job_chain1"}
-	answer := client.RemoveJobChain(params)
-	fmt.Println(answer)
+	/*
+		fmt.Println("@@@@@@@@@@@@Remove JobChain@@@@@@@@@@@@@@@@")
+		params := &jobscheduler.RemoveJobChainInput{JobChain: "test/job_chain1"}
+		answer := client.RemoveJobChain(params)
+		fmt.Println(answer)
+	*/
+	fmt.Println("@@@@@@@@@@@@Show JobChain@@@@@@@@@@@@@@@@")
+	params := &jobscheduler.ShowJobChainInput{JobChain: "test/test_job_chain"}
+	answer := client.ShowJobChain(params)
+	fmt.Println(answer.JobChain.Name)
 
 }

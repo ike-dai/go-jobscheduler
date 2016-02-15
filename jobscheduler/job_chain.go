@@ -89,9 +89,21 @@ type RemoveJobChainInput struct {
 	JobChain string   `xml:"job_chain,attr"`
 }
 
+type ShowJobChainInput struct {
+	XMLName  xml.Name `xml:"show_job_chain"`
+	JobChain string   `xml:"job_chain,attr"`
+	What     string   `xml:"what,attr"`
+}
+
 func (c *Client) ShowJobChains() *Answer {
 	params := &ShowStateInput{What: "job_chains"}
 	return c.ShowState(params)
+}
+
+func (c *Client) ShowJobChain(params *ShowJobChainInput) *Answer {
+	resp := c.CallApi(params)
+	spooler := GetSpoolerFromResponseBody(resp)
+	return spooler.Answer
 }
 
 func (c *Client) StartJobChain(params *AddOrderInput) *Answer {
