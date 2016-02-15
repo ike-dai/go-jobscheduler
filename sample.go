@@ -143,9 +143,20 @@ func main() {
 		answer := client.RemoveJobChain(params)
 		fmt.Println(answer)
 	*/
-	fmt.Println("@@@@@@@@@@@@Show JobChain@@@@@@@@@@@@@@@@")
-	params := &jobscheduler.ShowJobChainInput{JobChain: "test/test_job_chain"}
-	answer := client.ShowJobChain(params)
-	fmt.Println(answer.JobChain.Name)
+	/*
+		fmt.Println("@@@@@@@@@@@@Show JobChain@@@@@@@@@@@@@@@@")
+		params := &jobscheduler.ShowJobChainInput{JobChain: "test/test_job_chain"}
+		answer := client.ShowJobChain(params)
+		fmt.Println(answer.JobChain.Name)
+	*/
+	fmt.Println("@@@@@@@@@@@@Show Order History@@@@@@@@@@@@@@@@")
+	params := &jobscheduler.ShowOrderHistoryInput{JobChain: "test/test_job_chain"}
+	answer := client.ShowOrderHistory(params)
+	for _, order := range answer.JobChain.OrderHistory.Order {
+
+		fmt.Println(order.StartTime)
+		fmt.Println(order.EndTime)
+		fmt.Println(order.Id)
+	}
 
 }

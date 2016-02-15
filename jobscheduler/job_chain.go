@@ -20,6 +20,7 @@ type JobChain struct {
 	State             string          `xml:"state,attr"`
 	FileBased         *FileBased      `xml:"file_based"`
 	JobChainNodes     []*JobChainNode `xml:"job_chain_node"`
+	OrderHistory      *OrderHistory   `xml:"order_history"`
 }
 
 type FileBased struct {
@@ -90,9 +91,11 @@ type RemoveJobChainInput struct {
 }
 
 type ShowJobChainInput struct {
-	XMLName  xml.Name `xml:"show_job_chain"`
-	JobChain string   `xml:"job_chain,attr"`
-	What     string   `xml:"what,attr"`
+	XMLName         xml.Name `xml:"show_job_chain"`
+	JobChain        string   `xml:"job_chain,attr"`
+	What            string   `xml:"what,attr,omitempty"`
+	MaxOrders       string   `xml:"max_orders,attr,omitempty"`
+	MaxOrderHistory string   `xml:"max_order_history,attr,omitempty"`
 }
 
 func (c *Client) ShowJobChains() *Answer {
