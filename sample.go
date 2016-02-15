@@ -45,13 +45,14 @@ func main() {
 			fmt.Println(job.Job)
 		}
 	*/
+	/*
+		fmt.Println("@@@@@@@@@@@@Show Jobs@@@@@@@@@@@@@@@@")
+		answer := client.ShowJobs()
+		for _, job := range answer.State.Jobs.Job {
+			fmt.Println(job.Job)
+		}
 
-	fmt.Println("@@@@@@@@@@@@Show Jobs@@@@@@@@@@@@@@@@")
-	answer := client.ShowJobs()
-	for _, job := range answer.State.Jobs.Job {
-		fmt.Println(job.Job)
-	}
-
+	*/
 	/*
 		fmt.Println("@@@@@@@@@@@@Show Job@@@@@@@@@@@@@@@@")
 		job := client.ShowJob("/support_test/hogehoge")
@@ -136,5 +137,10 @@ func main() {
 		answer := client.ModifyHotFolder(params3)
 		fmt.Println(answer)
 	*/
+
+	fmt.Println("@@@@@@@@@@@@Remove JobChain@@@@@@@@@@@@@@@@")
+	params := &jobscheduler.RemoveJobChainInput{JobChain: "test/job_chain1"}
+	answer := client.RemoveJobChain(params)
+	fmt.Println(answer)
 
 }

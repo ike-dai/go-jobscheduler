@@ -84,6 +84,11 @@ type OrderQueue struct {
 	NextStartTime string   `xml:"next_start_time,attr"`
 }
 
+type RemoveJobChainInput struct {
+	XMLName  xml.Name `xml:"remove_job_chain"`
+	JobChain string   `xml:"job_chain,attr"`
+}
+
 func (c *Client) ShowJobChains() *Answer {
 	params := &ShowStateInput{What: "job_chains"}
 	return c.ShowState(params)
@@ -98,4 +103,10 @@ func (c *Client) StartJobChain(params *AddOrderInput) *Answer {
 func (c *Client) AddJobChain(job_chain *JobChainConf, folder string) *Answer {
 	params := &ModifyHotFolderInput{Folder: folder, JobChain: job_chain}
 	return c.ModifyHotFolder(params)
+}
+
+func (c *Client) RemoveJobChain(params *RemoveJobChainInput) *Answer {
+	resp := c.CallApi(params)
+	spooler := GetSpoolerFromResponseBody(resp)
+	return spooler.Answer
 }
