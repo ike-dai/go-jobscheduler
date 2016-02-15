@@ -62,10 +62,10 @@ func (c *Client) ShowState(params *ShowStateInput) *Answer {
 }
 
 type ModifyHotFolderInput struct {
-	XMLName xml.Name `xml:"modify_hot_folder"`
-	Folder  string   `xml:"folder,attr"`
-	Job     *JobConf `xml:"job,omitempty"`
-	//	JobChain JobChainConf `xml:"job_chain,omitempty"`
+	XMLName  xml.Name      `xml:"modify_hot_folder"`
+	Folder   string        `xml:"folder,attr"`
+	Job      *JobConf      `xml:"job,omitempty"`
+	JobChain *JobChainConf `xml:"job_chain,omitempty"`
 }
 
 func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) *Answer {

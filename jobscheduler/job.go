@@ -6,7 +6,7 @@ import (
 
 type Jobs struct {
 	XMLName xml.Name `xml:"jobs"`
-	Job     []Job    `xml:"job,omitempty"`
+	Job     []*Job   `xml:"job,omitempty"`
 }
 
 type Job struct {
