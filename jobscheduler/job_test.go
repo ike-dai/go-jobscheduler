@@ -11,6 +11,11 @@ var client *jobscheduler.Client
 var test_job_dir string
 var test_job_name string
 var test_job string
+var test_job_name_1 string
+var test_job_name_2 string
+var test_job_1 string
+var test_job_2 string
+var test_job_chain string
 
 func TestMain(m *testing.M) {
 	setup()
@@ -23,6 +28,11 @@ func setup() {
 	test_job_dir = "test"
 	test_job_name = "test_job"
 	test_job = test_job_dir + "/" + test_job_name
+	test_job_name_1 = "test_job_1"
+	test_job_name_2 = "test_job_2"
+	test_job_1 = test_job_dir + "/" + test_job_name_1
+	test_job_2 = test_job_dir + "/" + test_job_name_2
+	test_job_chain = "test_job_chain"
 }
 
 func TestAddJob(t *testing.T) {
