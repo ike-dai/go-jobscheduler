@@ -98,6 +98,17 @@ func (c *Client) ShowJobs() *Answer {
 	return c.ShowState(params)
 }
 
+func (c *Client) ShowJob(job_name string) *Job {
+	params := &ShowStateInput{What: "job_chain_jobs"}
+	answer := c.ShowState(params)
+	for _, job := range answer.State.Jobs.Job {
+		if job.Path == "/"+job_name {
+			return job
+		}
+	}
+	return nil
+}
+
 func (c *Client) ShowJobsWithSource() *Answer {
 	params := &ShowStateInput{What: "source"}
 	return c.ShowState(params)
@@ -108,10 +119,10 @@ func (c *Client) AddJob(job *JobConf, folder string) *Answer {
 	return c.ModifyHotFolder(params)
 }
 
-func (c *Client) ShowJob(path_name string) *JobConf {
+func (c *Client) ShowJobConf(job_name string) *JobConf {
 	answer := c.ShowJobsWithSource()
 	for _, job := range answer.State.Jobs.Job {
-		if job.Path == path_name {
+		if job.Path == "/"+job_name {
 			job.Source.Job.Name = job.Name
 			return job.Source.Job
 		}

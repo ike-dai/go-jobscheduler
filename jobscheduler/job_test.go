@@ -65,14 +65,23 @@ func TestShowJobs(t *testing.T) {
 			return
 		}
 	}
-	t.Errorf("Not found %s/%s \n", test_job_dir, test_job_name)
+	t.Errorf("Not found %s \n", test_job)
 }
 
 func TestShowJob(t *testing.T) {
-	job := client.ShowJob("/" + test_job)
-	if job.Name != test_job_name {
-		t.Errorf("Not get correct Job: [expected: %s, actual: %s]\n", test_job_name, job.Name)
+	job := client.ShowJob(test_job)
+	if job == nil {
+		t.Errorf("Not found %s \n", test_job)
 	}
+	t.Log(job)
+}
+
+func TestShowJobConf(t *testing.T) {
+	job_conf := client.ShowJobConf(test_job)
+	if job_conf.Name != test_job_name {
+		t.Errorf("Not get correct Job: [expected: %s, actual: %s]\n", test_job_name, job_conf.Name)
+	}
+	t.Log(job_conf)
 }
 
 func TestShowHistory(t *testing.T) {
@@ -87,6 +96,40 @@ func TestShowHistory(t *testing.T) {
 	t.Log(answer.History.HistoryEntry)
 }
 
+func TestStopJob(t *testing.T) {
+	answer := client.StopJob(test_job)
+	if answer.Ok == nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	}
+
+	time.Sleep(time.Second * 10) // for waiting JobScheduler process
+
+	job := client.ShowJob(test_job)
+	if job.State != "stopped" {
+		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "stopped", job.State)
+	}
+	t.Log(job.State)
+	t.Log(answer)
+}
+
+func TestUnStopJob(t *testing.T) {
+	answer := client.UnStopJob(test_job)
+	if answer.Ok == nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	}
+	time.Sleep(time.Second * 10) // for waiting JobScheduler process
+
+	job := client.ShowJob(test_job)
+	if job.State != "pending" {
+		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "pending", job.State)
+	}
+	t.Log(job.State)
+	t.Log(answer)
+}
+
+func TestUpdateJob(t *testing.T) {
+
+}
 func TestRemoveJob(t *testing.T) {
 	answer := client.RemoveJob("test/test_job")
 	if answer.Ok == nil {
