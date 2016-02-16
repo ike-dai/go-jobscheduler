@@ -75,6 +75,18 @@ func TestShowJob(t *testing.T) {
 	}
 }
 
+func TestShowHistory(t *testing.T) {
+	params := &jobscheduler.ShowHistoryInput{Job: test_job}
+	answer := client.ShowHistory(params)
+	if answer.History == nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	}
+	if len(answer.History.HistoryEntry) == 0 {
+		t.Errorf("No history entry at job: %s \n", test_job)
+	}
+	t.Log(answer.History.HistoryEntry)
+}
+
 func TestRemoveJob(t *testing.T) {
 	answer := client.RemoveJob("test/test_job")
 	if answer.Ok == nil {

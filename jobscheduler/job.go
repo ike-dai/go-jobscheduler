@@ -78,6 +78,15 @@ type ShowJobsInput struct {
 	XMLName xml.Name `xml:"start_job"`
 }
 
+type ShowHistoryInput struct {
+	XMLName xml.Name `xml:"show_history"`
+	Job     string   `xml:"job,attr,omitempty"`
+	Id      string   `xml:"id,attr,omitempty"`
+	Next    string   `xml:"next,attr,omitempty"`
+	Prev    string   `xml:"prev,attr,omitempty"`
+	What    string   `xml:"what,attr,omitempty"`
+}
+
 func (c *Client) StartJob(params *StartJobInput) *Answer {
 	resp := c.CallApi(params)
 	spooler := GetSpoolerFromResponseBody(resp)
@@ -158,4 +167,10 @@ func (c *Client) ContinueJob(job_name string) *Answer {
 func (c *Client) RemoveJob(job_name string) *Answer {
 	params := &ModifyJobInput{Job: job_name, Cmd: "remove"}
 	return c.ModifyJob(params)
+}
+
+func (c *Client) ShowHistory(params *ShowHistoryInput) *Answer {
+	resp := c.CallApi(params)
+	spooler := GetSpoolerFromResponseBody(resp)
+	return spooler.Answer
 }

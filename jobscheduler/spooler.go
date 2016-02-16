@@ -15,7 +15,9 @@ type Answer struct {
 	Error    *Error    `xml:"ERROR,omitempty"`
 	State    *State    `xml:"state,omitempty"`
 	JobChain *JobChain `xml:"job_chain,omitempty"`
+	History  *History  `xml:"history,omitempty"`
 }
+
 type Ok struct {
 	XMLName xml.Name `xml:"ok"`
 	Task    *Task    `xml:"task,omitempty"`
@@ -38,6 +40,26 @@ type State struct {
 	Jobs       *Jobs      `xml:"jobs,omitempty"`
 	JobChains  *JobChains `xml:"job_chains,omitempty"`
 	//ProcessClasses ProcessClasses `xml:"process_classes,omitempty"`
+}
+
+type History struct {
+	XMLName      xml.Name        `xml:"history"`
+	HistoryEntry []*HistoryEntry `xml:"history.entry,omitempty"`
+}
+
+type HistoryEntry struct {
+	XMLName   xml.Name `xml:"history.entry"`
+	Cause     string   `xml:"cause,attr,omitempty"`
+	EndTime   string   `xml:"end_time,attr,omitempty"`
+	Error     string   `xml:"error,attr,omitempty"`
+	ExitCode  string   `xml:"exit_code,attr,omitempty"`
+	Id        string   `xml:"id,attr,omitempty"`
+	JobName   string   `xml:"job_name,attr,omitempty"`
+	Pid       string   `xml:"pid,attr,omitempty"`
+	SpoolerId string   `xml:"spooler_id,attr,omitempty"`
+	StartTime string   `xml:"start_time,attr,omitempty"`
+	Steps     string   `xml:"steps,attr,omitempty"`
+	Task      string   `xml:"task,attr,omitempty"`
 }
 
 type Script struct {
