@@ -24,7 +24,7 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	client = jobscheduler.NewClient("http://localhost:4444")
+	client = jobscheduler.NewClient(os.Getenv("JS_URL"))
 	test_job_dir = "test"
 	test_job_name = "test_job"
 	test_job = test_job_dir + "/" + test_job_name
@@ -66,6 +66,13 @@ func TestShowJobs(t *testing.T) {
 		}
 	}
 	t.Errorf("Not found %s/%s \n", test_job_dir, test_job_name)
+}
+
+func TestShowJob(t *testing.T) {
+	job := client.ShowJob("/" + test_job)
+	if job.Name != test_job_name {
+		t.Errorf("Not get correct Job: [expected: %s, actual: %s]\n", test_job_name, job.Name)
+	}
 }
 
 func TestRemoveJob(t *testing.T) {
