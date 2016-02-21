@@ -39,6 +39,7 @@ type State struct {
 	Loop       string     `xml:"loop,attr"`
 	Jobs       *Jobs      `xml:"jobs,omitempty"`
 	JobChains  *JobChains `xml:"job_chains,omitempty"`
+	Schedules  *Schedules `xml:"schedules,omitempty"`
 	//ProcessClasses ProcessClasses `xml:"process_classes,omitempty"`
 }
 

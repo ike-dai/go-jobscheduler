@@ -37,6 +37,9 @@ type Schedules struct {
 
 type Schedule struct {
 	XMLName   xml.Name   `xml:"schedule"`
+	Active    string     `xml:"active,attr,omitempty"`
+	Name      string     `xml:"name,attr,omitempty"`
+	Path      string     `xml:"path,attr,omitempty"`
 	Period    []*Period  `xml:"period,omitempty"`
 	Date      []*Date    `xml:"date,omitempty"`
 	Weekdays  *Weekdays  `xml:"weekdays,omitempty"`
@@ -117,4 +120,16 @@ type Holiday struct {
 type Include struct {
 	XMLName xml.Name `xml:"include"`
 	File    string   `xml:"file,attr,omitempty"`
+}
+
+func (c *Client) ShowSchedules() (*Schedules, *Error) {
+	params := &ShowStateInput{What: "schedules"}
+	answer := c.ShowState(params)
+	if answer.Error != nil {
+		return nil, answer.Error
+	}
+	if answer.State != nil {
+		return answer.State.Schedules, nil
+	}
+	return nil, nil
 }
