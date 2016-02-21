@@ -90,6 +90,7 @@ type ModifyHotFolderInput struct {
 	Folder   string        `xml:"folder,attr"`
 	Job      *JobConf      `xml:"job,omitempty"`
 	JobChain *JobChainConf `xml:"job_chain,omitempty"`
+	Schedule *ScheduleConf `xml:"schedule,omitempty"`
 }
 
 func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) *Answer {

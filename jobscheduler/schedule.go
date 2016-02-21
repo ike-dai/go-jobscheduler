@@ -35,6 +35,17 @@ type Schedules struct {
 	Schedule []*Schedule `xml:"schedule,omitempty"`
 }
 
+type ScheduleConf struct {
+	XMLName   xml.Name   `xml:"schedule"`
+	Name      string     `xml:"name,attr,omitempty"`
+	Period    []*Period  `xml:"period,omitempty"`
+	Date      []*Date    `xml:"date,omitempty"`
+	Weekdays  *Weekdays  `xml:"weekdays,omitempty"`
+	Monthdays *Monthdays `xml:"monthdays,omitempty"`
+	Ultimos   *Ultimos   `xml:"ultimos,omittempty"`
+	Month     []*Month   `xml:"month,omitempty"`
+	Holidays  *Holidays  `xml:"holidays,omitempty"`
+}
 type Schedule struct {
 	XMLName   xml.Name   `xml:"schedule"`
 	Active    string     `xml:"active,attr,omitempty"`
@@ -132,4 +143,9 @@ func (c *Client) ShowSchedules() (*Schedules, *Error) {
 		return answer.State.Schedules, nil
 	}
 	return nil, nil
+}
+
+func (c *Client) AddSchedule(schedule *ScheduleConf, folder string) *Answer {
+	params := &ModifyHotFolderInput{Folder: folder, Schedule: schedule}
+	return c.ModifyHotFolder(params)
 }
