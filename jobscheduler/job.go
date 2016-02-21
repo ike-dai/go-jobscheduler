@@ -23,6 +23,7 @@ type Job struct {
 	Path             string   `xml:"path,attr"`
 	State            string   `xml:"state,attr"`
 	Tasks            string   `xml:"tasks,attr"`
+	RunTime          *RunTime `xml:"run_time,omitempty"`
 	Source           *Source  `xml:"source,omitempty"`
 }
 
@@ -54,6 +55,7 @@ type JobConf struct {
 	WarnIfLongerThan  string   `xml:"warn_if_longer_than,attr,omitempty"`
 	WarnIfShorterThan string   `xml:"warn_if_shorter_than,attr,omitempty"`
 	Script            *Script  `xml:"script"`
+	RunTime           *RunTime `xml:"run_time,omitempty"`
 }
 
 type StartJobInput struct {

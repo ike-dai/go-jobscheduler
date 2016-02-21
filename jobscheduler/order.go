@@ -24,6 +24,7 @@ type Order struct {
 	State        string   `xml:"state,attr,omitempty"`
 	StateText    string   `xml:"state_text,attr,omitempty"`
 	Title        string   `xml:"title,attr,omitempty"`
+	RunTime      *RunTime `xml:"run_time,omitempty"`
 }
 
 type AddOrderInput struct {
@@ -38,7 +39,7 @@ type AddOrderInput struct {
 	Title      string   `xml:"title,attr,omitempty"`
 	WebService string   `xml:"web_service,attr,omitempty"`
 	//Params *Params `xml:"params,omitempty"`
-	//RunTime *RunTime `xml:"run_time,omitempty"`
+	RunTime *RunTime `xml:"run_time,omitempty"`
 	//XmlPayload *XmlPayload `xml:"xml_payload,omitempty"`
 }
 
