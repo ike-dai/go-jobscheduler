@@ -36,28 +36,34 @@ type Schedules struct {
 }
 
 type ScheduleConf struct {
-	XMLName   xml.Name   `xml:"schedule"`
-	Name      string     `xml:"name,attr,omitempty"`
-	Period    []*Period  `xml:"period,omitempty"`
-	Date      []*Date    `xml:"date,omitempty"`
-	Weekdays  *Weekdays  `xml:"weekdays,omitempty"`
-	Monthdays *Monthdays `xml:"monthdays,omitempty"`
-	Ultimos   *Ultimos   `xml:"ultimos,omittempty"`
-	Month     []*Month   `xml:"month,omitempty"`
-	Holidays  *Holidays  `xml:"holidays,omitempty"`
+	XMLName    xml.Name   `xml:"schedule"`
+	Name       string     `xml:"name,attr,omitempty"`
+	Substitute string     `xml:"substitute,attr,omitempty"`
+	ValidFrom  string     `xml:"valid_from,attr,omitempty"`
+	ValidTo    string     `xml:"valid_to,attr,omitempty"`
+	Period     []*Period  `xml:"period,omitempty"`
+	Date       []*Date    `xml:"date,omitempty"`
+	Weekdays   *Weekdays  `xml:"weekdays,omitempty"`
+	Monthdays  *Monthdays `xml:"monthdays,omitempty"`
+	Ultimos    *Ultimos   `xml:"ultimos,omittempty"`
+	Month      []*Month   `xml:"month,omitempty"`
+	Holidays   *Holidays  `xml:"holidays,omitempty"`
 }
 type Schedule struct {
-	XMLName   xml.Name   `xml:"schedule"`
-	Active    string     `xml:"active,attr,omitempty"`
-	Name      string     `xml:"name,attr,omitempty"`
-	Path      string     `xml:"path,attr,omitempty"`
-	Period    []*Period  `xml:"period,omitempty"`
-	Date      []*Date    `xml:"date,omitempty"`
-	Weekdays  *Weekdays  `xml:"weekdays,omitempty"`
-	Monthdays *Monthdays `xml:"monthdays,omitempty"`
-	Ultimos   *Ultimos   `xml:"ultimos,omittempty"`
-	Month     []*Month   `xml:"month,omitempty"`
-	Holidays  *Holidays  `xml:"holidays,omitempty"`
+	XMLName    xml.Name   `xml:"schedule"`
+	Active     string     `xml:"active,attr,omitempty"`
+	Name       string     `xml:"name,attr,omitempty"`
+	Path       string     `xml:"path,attr,omitempty"`
+	Substitute string     `xml:"substitute,attr,omitempty"`
+	ValidFrom  string     `xml:"valid_from,attr,omitempty"`
+	ValidTo    string     `xml:"valid_to,attr,omitempty"`
+	Period     []*Period  `xml:"period,omitempty"`
+	Date       []*Date    `xml:"date,omitempty"`
+	Weekdays   *Weekdays  `xml:"weekdays,omitempty"`
+	Monthdays  *Monthdays `xml:"monthdays,omitempty"`
+	Ultimos    *Ultimos   `xml:"ultimos,omittempty"`
+	Month      []*Month   `xml:"month,omitempty"`
+	Holidays   *Holidays  `xml:"holidays,omitempty"`
 }
 
 type Period struct {
