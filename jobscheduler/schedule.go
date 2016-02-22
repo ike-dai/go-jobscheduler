@@ -66,6 +66,22 @@ type Schedule struct {
 	Holidays   *Holidays  `xml:"holidays,omitempty"`
 }
 
+func ConvertToScheduleConf(schedule *Schedule) *ScheduleConf {
+	return &ScheduleConf{
+		Name:       schedule.Name,
+		Substitute: schedule.Substitute,
+		ValidFrom:  schedule.ValidFrom,
+		ValidTo:    schedule.ValidTo,
+		Period:     schedule.Period,
+		Date:       schedule.Date,
+		Weekdays:   schedule.Weekdays,
+		Monthdays:  schedule.Monthdays,
+		Ultimos:    schedule.Ultimos,
+		Month:      schedule.Month,
+		Holidays:   schedule.Holidays,
+	}
+}
+
 type Period struct {
 	XMLName        xml.Name `xml:"period"`
 	SingleStart    string   `xml:"single_start,attr,omitempty"`
@@ -151,7 +167,25 @@ func (c *Client) ShowSchedules() (*Schedules, *Error) {
 	return nil, nil
 }
 
+func (c *Client) ShowSchedule(schedule_name string) (*Schedule, *Error) {
+	schedules, err := c.ShowSchedules()
+	if err != nil {
+		return nil, err
+	}
+	for _, schedule := range schedules.Schedule {
+		if schedule.Path == "/"+schedule_name {
+			return schedule, nil
+		}
+	}
+	return nil, nil
+}
+
 func (c *Client) AddSchedule(schedule *ScheduleConf, folder string) *Answer {
+	params := &ModifyHotFolderInput{Folder: folder, Schedule: schedule}
+	return c.ModifyHotFolder(params)
+}
+
+func (c *Client) UpdateSchedule(schedule *ScheduleConf, folder string) *Answer {
 	params := &ModifyHotFolderInput{Folder: folder, Schedule: schedule}
 	return c.ModifyHotFolder(params)
 }
