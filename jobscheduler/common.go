@@ -45,3 +45,8 @@ func contains(elements []string, input string) bool {
 	}
 	return false
 }
+
+func getFolderName(fullpath string) string {
+	splited := strings.Split(fullpath, "/")
+	return strings.Join(splited[:len(splited)-1], "/")
+}

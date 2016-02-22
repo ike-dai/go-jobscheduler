@@ -24,10 +24,11 @@ func TestAddJobChain(t *testing.T) {
 	node_list := []*jobscheduler.JobChainNodeConf{job_chain_node1, job_chain_node2, success_node, error_node}
 	job_chain := &jobscheduler.JobChainConf{Name: test_job_chain, JobChainNode: node_list}
 	params3 := &jobscheduler.ModifyHotFolderInput{Folder: test_job_dir, JobChain: job_chain}
-	answer := client.ModifyHotFolder(params3)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	answer, err := client.ModifyHotFolder(params3)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
+	t.Log(answer)
 	time.Sleep(time.Second * 15) // for waiting JobScheduler process
 }
 

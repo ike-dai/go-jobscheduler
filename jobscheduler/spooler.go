@@ -93,8 +93,8 @@ type ModifyHotFolderInput struct {
 	Schedule *ScheduleConf `xml:"schedule,omitempty"`
 }
 
-func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) *Answer {
+func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) (*Answer, *Error) {
 	resp := c.CallApi(params)
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer, spooler.Answer.Error
 }

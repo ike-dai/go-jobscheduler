@@ -115,7 +115,7 @@ func (c *Client) StartJobChain(params *AddOrderInput) *Answer {
 	return spooler.Answer
 }
 
-func (c *Client) AddJobChain(job_chain *JobChainConf, folder string) *Answer {
+func (c *Client) AddJobChain(job_chain *JobChainConf, folder string) (*Answer, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, JobChain: job_chain}
 	return c.ModifyHotFolder(params)
 }

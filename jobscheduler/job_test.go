@@ -39,10 +39,11 @@ func TestAddJob(t *testing.T) {
 	script := &jobscheduler.Script{Language: "shell", Script: "echo test_job"}
 	job := &jobscheduler.JobConf{Name: test_job_name, Script: script, Order: "no"}
 	params := &jobscheduler.ModifyHotFolderInput{Folder: test_job_dir, Job: job}
-	answer := client.ModifyHotFolder(params)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	answer, err := client.ModifyHotFolder(params)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
+	t.Log(answer)
 	time.Sleep(time.Second * 10) // for waiting JobScheduler process
 }
 
@@ -128,7 +129,13 @@ func TestUnStopJob(t *testing.T) {
 }
 
 func TestUpdateJob(t *testing.T) {
-
+	job_conf := client.ShowJobConf("test/test_job")
+	job_conf.Title = "Changed"
+	answer, err := client.UpdateJob(job_conf, "test/test_job")
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	t.Log(answer)
 }
 func TestRemoveJob(t *testing.T) {
 	answer := client.RemoveJob("test/test_job")

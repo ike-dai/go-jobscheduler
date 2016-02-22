@@ -116,7 +116,7 @@ func (c *Client) ShowJobsWithSource() *Answer {
 	return c.ShowState(params)
 }
 
-func (c *Client) AddJob(job *JobConf, folder string) *Answer {
+func (c *Client) AddJob(job *JobConf, folder string) (*Answer, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, Job: job}
 	return c.ModifyHotFolder(params)
 }
@@ -132,8 +132,12 @@ func (c *Client) ShowJobConf(job_name string) *JobConf {
 	return nil
 }
 
-func (c *Client) UpdateJob(job *JobConf, folder string) *Answer {
-	params := &ModifyHotFolderInput{Folder: folder, Job: job}
+// UpdateJob:
+func (c *Client) UpdateJob(job *JobConf, job_name string) (*Answer, *Error) {
+	if c.ShowJob(job_name) == nil {
+		return nil, &Error{Code: "error", Text: "Not found update target Job"}
+	}
+	params := &ModifyHotFolderInput{Folder: getFolderName(job_name), Job: job}
 	return c.ModifyHotFolder(params)
 }
 

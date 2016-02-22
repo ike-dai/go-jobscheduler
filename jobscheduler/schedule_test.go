@@ -43,10 +43,11 @@ func TestAddSchedule(t *testing.T) {
 		Name:   "test_schedule",
 		Period: periods,
 	}
-	answer := client.AddSchedule(schedule, "test")
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	answer, err := client.AddSchedule(schedule, "test")
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
+	t.Log(answer)
 }
 
 func TestUpdateSchedule(t *testing.T) {
