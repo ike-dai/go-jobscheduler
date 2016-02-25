@@ -49,13 +49,20 @@ type ShowOrderHistoryInput struct {
 	MaxOrderHistory string
 }
 
-func (c *Client) AddOrder(params *AddOrderInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) AddOrder(params *AddOrderInput) (*Ok, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.Ok, spooler.Answer.Error
 }
 
-func (c *Client) ShowOrderHistory(params *ShowOrderHistoryInput) *Answer {
+func (c *Client) ShowOrderHistory(params *ShowOrderHistoryInput) ([]*Order, *Error) {
 	show_job_chain_params := &ShowJobChainInput{JobChain: params.JobChain, MaxOrders: params.MaxOrders, MaxOrderHistory: params.MaxOrderHistory, What: "order_history"}
-	return c.ShowJobChain(show_job_chain_params)
+	job_chain, err := c.ShowJobChain(show_job_chain_params)
+	if err != nil {
+		return nil, err
+	}
+	return job_chain.OrderHistory.Order, nil
 }

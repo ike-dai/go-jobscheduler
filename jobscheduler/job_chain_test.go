@@ -34,24 +34,24 @@ func TestAddJobChain(t *testing.T) {
 
 func TestStartJobChain(t *testing.T) {
 	params := &jobscheduler.AddOrderInput{Id: "test", JobChain: test_job_dir + "/" + test_job_chain, State: "step1"}
-	answer := client.StartJobChain(params)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	_, err := client.StartJobChain(params)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 }
 
 func TestShowJobChain(t *testing.T) {
 	params := &jobscheduler.ShowJobChainInput{JobChain: test_job_dir + "/" + test_job_chain}
-	answer := client.ShowJobChain(params)
-	if answer.JobChain == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	_, err := client.ShowJobChain(params)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 }
 
 func TestRemoveJobChain(t *testing.T) {
 	params := &jobscheduler.RemoveJobChainInput{JobChain: test_job_dir + "/" + test_job_chain}
-	answer := client.RemoveJobChain(params)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	_, err := client.RemoveJobChain(params)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 }

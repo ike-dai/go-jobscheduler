@@ -79,10 +79,13 @@ type ShowStateInput struct {
 	What      string   `xml:"what,attr,omitempty"`
 }
 
-func (c *Client) ShowState(params *ShowStateInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) ShowState(params *ShowStateInput) (*State, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.State, spooler.Answer.Error
 }
 
 type ModifyHotFolderInput struct {
@@ -93,8 +96,11 @@ type ModifyHotFolderInput struct {
 	Schedule *ScheduleConf `xml:"schedule,omitempty"`
 }
 
-func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) (*Answer, *Error) {
-	resp := c.CallApi(params)
+func (c *Client) ModifyHotFolder(params *ModifyHotFolderInput) (*Ok, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer, spooler.Answer.Error
+	return spooler.Answer.Ok, spooler.Answer.Error
 }

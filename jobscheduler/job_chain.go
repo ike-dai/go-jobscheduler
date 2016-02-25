@@ -98,30 +98,39 @@ type ShowJobChainInput struct {
 	MaxOrderHistory string   `xml:"max_order_history,attr,omitempty"`
 }
 
-func (c *Client) ShowJobChains() *Answer {
+func (c *Client) ShowJobChains() (*State, *Error) {
 	params := &ShowStateInput{What: "job_chains"}
 	return c.ShowState(params)
 }
 
-func (c *Client) ShowJobChain(params *ShowJobChainInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) ShowJobChain(params *ShowJobChainInput) (*JobChain, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.JobChain, nil
 }
 
-func (c *Client) StartJobChain(params *AddOrderInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) StartJobChain(params *AddOrderInput) (*Ok, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.Ok, spooler.Answer.Error
 }
 
-func (c *Client) AddJobChain(job_chain *JobChainConf, folder string) (*Answer, *Error) {
+func (c *Client) AddJobChain(job_chain *JobChainConf, folder string) (*Ok, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, JobChain: job_chain}
 	return c.ModifyHotFolder(params)
 }
 
-func (c *Client) RemoveJobChain(params *RemoveJobChainInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) RemoveJobChain(params *RemoveJobChainInput) (*Ok, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.Ok, spooler.Answer.Error
 }

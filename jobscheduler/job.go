@@ -89,105 +89,129 @@ type ShowHistoryInput struct {
 	What    string   `xml:"what,attr,omitempty"`
 }
 
-func (c *Client) StartJob(params *StartJobInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) StartJob(params *StartJobInput) (*Ok, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.Ok, spooler.Answer.Error
 }
 
-func (c *Client) ShowJobs() *Answer {
+func (c *Client) ShowJobs() ([]*Job, *Error) {
 	params := &ShowStateInput{What: "job_chain_jobs"}
-	return c.ShowState(params)
+	state, err := c.ShowState(params)
+	return state.Jobs.Job, err
 }
 
-func (c *Client) ShowJob(job_name string) *Job {
+func (c *Client) ShowJob(job_name string) (*Job, *Error) {
 	params := &ShowStateInput{What: "job_chain_jobs"}
-	answer := c.ShowState(params)
-	for _, job := range answer.State.Jobs.Job {
+	state, err := c.ShowState(params)
+	if err != nil {
+		return nil, err
+	}
+	for _, job := range state.Jobs.Job {
 		if job.Path == "/"+job_name {
-			return job
+			return job, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
 
-func (c *Client) ShowJobsWithSource() *Answer {
+func (c *Client) ShowJobsWithSource() ([]*Job, *Error) {
 	params := &ShowStateInput{What: "source"}
-	return c.ShowState(params)
+	state, err := c.ShowState(params)
+	if err != nil {
+		return nil, err
+	}
+	return state.Jobs.Job, err
 }
 
-func (c *Client) AddJob(job *JobConf, folder string) (*Answer, *Error) {
+func (c *Client) AddJob(job *JobConf, folder string) (*Ok, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, Job: job}
 	return c.ModifyHotFolder(params)
 }
 
-func (c *Client) ShowJobConf(job_name string) *JobConf {
-	answer := c.ShowJobsWithSource()
-	for _, job := range answer.State.Jobs.Job {
+func (c *Client) ShowJobConf(job_name string) (*JobConf, *Error) {
+	jobs, err := c.ShowJobsWithSource()
+	if err != nil {
+		return nil, err
+	}
+	for _, job := range jobs {
 		if job.Path == "/"+job_name {
 			job.Source.Job.Name = job.Name
-			return job.Source.Job
+			return job.Source.Job, err
 		}
 	}
-	return nil
+	return nil, err
 }
 
 // UpdateJob:
-func (c *Client) UpdateJob(job *JobConf, job_name string) (*Answer, *Error) {
-	if c.ShowJob(job_name) == nil {
+func (c *Client) UpdateJob(job *JobConf, job_name string) (*Ok, *Error) {
+	found_job, err := c.ShowJob(job_name)
+	if err != nil {
+		return nil, err
+	}
+	if found_job == nil {
 		return nil, &Error{Code: "error", Text: "Not found update target Job"}
 	}
 	params := &ModifyHotFolderInput{Folder: getFolderName(job_name), Job: job}
 	return c.ModifyHotFolder(params)
 }
 
-func (c *Client) ModifyJob(params *ModifyJobInput) *Answer {
+func (c *Client) ModifyJob(params *ModifyJobInput) (*Ok, *Error) {
 	all_cmd := []string{"stop", "unstop", "start", "wake", "end", "suspend", "continue", "remove"}
 	if contains(all_cmd, params.Cmd) {
-		resp := c.CallApi(params)
+		resp, err := c.CallApi(params)
+		if err != nil {
+			return nil, err
+		}
 		spooler := GetSpoolerFromResponseBody(resp)
-		return spooler.Answer
+		return spooler.Answer.Ok, nil
 	}
-	return nil
+	return nil, &Error{Code: "error", Text: "Not supported command " + params.Cmd}
 }
 
-func (c *Client) StopJob(job_name string) *Answer {
+func (c *Client) StopJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "stop"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) UnStopJob(job_name string) *Answer {
+func (c *Client) UnStopJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "unstop"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) SuspendJob(job_name string) *Answer {
+func (c *Client) SuspendJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "suspend"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) WakeJob(job_name string) *Answer {
+func (c *Client) WakeJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "wake"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) EndJob(job_name string) *Answer {
+func (c *Client) EndJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "end"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) ContinueJob(job_name string) *Answer {
+func (c *Client) ContinueJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "continue"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) RemoveJob(job_name string) *Answer {
+func (c *Client) RemoveJob(job_name string) (*Ok, *Error) {
 	params := &ModifyJobInput{Job: job_name, Cmd: "remove"}
 	return c.ModifyJob(params)
 }
 
-func (c *Client) ShowHistory(params *ShowHistoryInput) *Answer {
-	resp := c.CallApi(params)
+func (c *Client) ShowHistory(params *ShowHistoryInput) ([]*HistoryEntry, *Error) {
+	resp, err := c.CallApi(params)
+	if err != nil {
+		return nil, err
+	}
 	spooler := GetSpoolerFromResponseBody(resp)
-	return spooler.Answer
+	return spooler.Answer.History.HistoryEntry, nil
 }

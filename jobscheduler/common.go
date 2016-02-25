@@ -26,15 +26,15 @@ func GetSpoolerFromResponseBody(resp *http.Response) *Spooler {
 	return &spooler
 }
 
-func (c *Client) CallApi(params interface{}) *http.Response {
+func (c *Client) CallApi(params interface{}) (*http.Response, *Error) {
 	buf, _ := xml.MarshalIndent(params, "", " ")
 	req, _ := http.NewRequest("POST", c.Url, strings.NewReader(string(buf)))
 	resp, err := c.Do(req)
 	if err != nil {
 		fmt.Printf("[ERROR]: Cannot access JobScheduler API: %s \n", err)
-		return nil
+		return nil, &Error{Code: "error", Text: "Cannot access JobScheduler API "}
 	}
-	return resp
+	return resp, nil
 }
 
 func contains(elements []string, input string) bool {

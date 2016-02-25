@@ -157,12 +157,12 @@ type Include struct {
 
 func (c *Client) ShowSchedules() (*Schedules, *Error) {
 	params := &ShowStateInput{What: "schedules"}
-	answer := c.ShowState(params)
-	if answer.Error != nil {
-		return nil, answer.Error
+	state, err := c.ShowState(params)
+	if err != nil {
+		return nil, err
 	}
-	if answer.State != nil {
-		return answer.State.Schedules, nil
+	if state != nil {
+		return state.Schedules, nil
 	}
 	return nil, nil
 }
@@ -180,12 +180,12 @@ func (c *Client) ShowSchedule(schedule_name string) (*Schedule, *Error) {
 	return nil, nil
 }
 
-func (c *Client) AddSchedule(schedule *ScheduleConf, folder string) (*Answer, *Error) {
+func (c *Client) AddSchedule(schedule *ScheduleConf, folder string) (*Ok, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, Schedule: schedule}
 	return c.ModifyHotFolder(params)
 }
 
-func (c *Client) UpdateSchedule(schedule *ScheduleConf, folder string) (*Answer, *Error) {
+func (c *Client) UpdateSchedule(schedule *ScheduleConf, folder string) (*Ok, *Error) {
 	params := &ModifyHotFolderInput{Folder: folder, Schedule: schedule}
 	return c.ModifyHotFolder(params)
 }

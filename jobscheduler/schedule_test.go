@@ -51,7 +51,13 @@ func TestAddSchedule(t *testing.T) {
 }
 
 func TestUpdateSchedule(t *testing.T) {
-	schedule, _ := client.ShowSchedule("test/test_schedule")
+	schedule, err := client.ShowSchedule("test/test_schedule")
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	if schedule == nil {
+		t.Errorf("Not found any schedule \n")
+	}
 	schedule_conf := jobscheduler.ConvertToScheduleConf(schedule)
 	schedule_conf.Period[0] = &jobscheduler.Period{SingleStart: "11:11"}
 	client.UpdateSchedule(schedule_conf, "test")

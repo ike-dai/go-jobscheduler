@@ -39,29 +39,29 @@ func TestAddJob(t *testing.T) {
 	script := &jobscheduler.Script{Language: "shell", Script: "echo test_job"}
 	job := &jobscheduler.JobConf{Name: test_job_name, Script: script, Order: "no"}
 	params := &jobscheduler.ModifyHotFolderInput{Folder: test_job_dir, Job: job}
-	answer, err := client.ModifyHotFolder(params)
+	ok, err := client.ModifyHotFolder(params)
 	if err != nil {
 		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
-	t.Log(answer)
+	t.Log(ok)
 	time.Sleep(time.Second * 10) // for waiting JobScheduler process
 }
 
 func TestStartJob(t *testing.T) {
 	params := &jobscheduler.StartJobInput{Job: test_job}
-	answer := client.StartJob(params)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	_, err := client.StartJob(params)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 }
 
 func TestShowJobs(t *testing.T) {
-	answer := client.ShowJobs()
-	if answer.State == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	jobs, err := client.ShowJobs()
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 
-	for _, job := range answer.State.Jobs.Job {
+	for _, job := range jobs {
 		if job.Job == test_job_name {
 			return
 		}
@@ -70,15 +70,18 @@ func TestShowJobs(t *testing.T) {
 }
 
 func TestShowJob(t *testing.T) {
-	job := client.ShowJob(test_job)
-	if job == nil {
+	job, err := client.ShowJob(test_job)
+	if err != nil {
 		t.Errorf("Not found %s \n", test_job)
 	}
 	t.Log(job)
 }
 
 func TestShowJobConf(t *testing.T) {
-	job_conf := client.ShowJobConf(test_job)
+	job_conf, err := client.ShowJobConf(test_job)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
 	if job_conf.Name != test_job_name {
 		t.Errorf("Not get correct Job: [expected: %s, actual: %s]\n", test_job_name, job_conf.Name)
 	}
@@ -87,59 +90,66 @@ func TestShowJobConf(t *testing.T) {
 
 func TestShowHistory(t *testing.T) {
 	params := &jobscheduler.ShowHistoryInput{Job: test_job}
-	answer := client.ShowHistory(params)
-	if answer.History == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
-	}
-	if len(answer.History.HistoryEntry) == 0 {
-		t.Errorf("No history entry at job: %s \n", test_job)
-	}
-	t.Log(answer.History.HistoryEntry)
-}
-
-func TestStopJob(t *testing.T) {
-	answer := client.StopJob(test_job)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
-	}
-
-	time.Sleep(time.Second * 10) // for waiting JobScheduler process
-
-	job := client.ShowJob(test_job)
-	if job.State != "stopped" {
-		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "stopped", job.State)
-	}
-	t.Log(job.State)
-	t.Log(answer)
-}
-
-func TestUnStopJob(t *testing.T) {
-	answer := client.UnStopJob(test_job)
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
-	}
-	time.Sleep(time.Second * 10) // for waiting JobScheduler process
-
-	job := client.ShowJob(test_job)
-	if job.State != "pending" {
-		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "pending", job.State)
-	}
-	t.Log(job.State)
-	t.Log(answer)
-}
-
-func TestUpdateJob(t *testing.T) {
-	job_conf := client.ShowJobConf("test/test_job")
-	job_conf.Title = "Changed"
-	answer, err := client.UpdateJob(job_conf, "test/test_job")
+	history_entry, err := client.ShowHistory(params)
 	if err != nil {
 		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
-	t.Log(answer)
+	if len(history_entry) == 0 {
+		t.Errorf("No history entry at job: %s \n", test_job)
+	}
+	t.Log(history_entry)
+}
+
+func TestStopJob(t *testing.T) {
+	_, err := client.StopJob(test_job)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+
+	time.Sleep(time.Second * 10) // for waiting JobScheduler process
+
+	job, err := client.ShowJob(test_job)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	if job.State != "stopped" {
+		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "stopped", job.State)
+	}
+	t.Log(job)
+}
+
+func TestUnStopJob(t *testing.T) {
+	_, err := client.UnStopJob(test_job)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	time.Sleep(time.Second * 10) // for waiting JobScheduler process
+
+	job, err := client.ShowJob(test_job)
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	if job.State != "pending" {
+		t.Errorf("Not much state: [expect: %s, actual: %s] \n", "pending", job.State)
+	}
+	t.Log(job)
+}
+
+func TestUpdateJob(t *testing.T) {
+	job_conf, err := client.ShowJobConf("test/test_job")
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
+	}
+	job_conf.Title = "Changed"
+
+	_, err2 := client.UpdateJob(job_conf, "test/test_job")
+	if err2 != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err2.Code, err2.Text)
+	}
 }
 func TestRemoveJob(t *testing.T) {
-	answer := client.RemoveJob("test/test_job")
-	if answer.Ok == nil {
-		t.Errorf("Got Error: [code: %s, text: %s] \n", answer.Error.Code, answer.Error.Text)
+	_, err := client.RemoveJob("test/test_job")
+	if err != nil {
+		t.Errorf("Got Error: [code: %s, text: %s] \n", err.Code, err.Text)
 	}
 }
