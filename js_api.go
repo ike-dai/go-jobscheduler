@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/ike-dai/go-jobscheduler/jobscheduler"
 	"os"
 )
@@ -17,7 +18,22 @@ func parseOption() {
 
 func StartJob(client *jobscheduler.Client, job, at string) {
 	params := &jobscheduler.StartJobInput{Job: job, At: at}
-	client.StartJob(params)
+	_, err := client.StartJob(params)
+	if err != nil {
+		fmt.Printf("[ERROR] Cannot start job: %s \n", err.Text)
+		return
+	}
+	fmt.Printf("[OK] Success starting job: %s \n", job)
+}
+
+func StartJobChain(client *jobscheduler.Client, job_chain, at string) {
+	params := &jobscheduler.AddOrderInput{JobChain: job_chain, At: at, Id: "js_api"}
+	_, err := client.StartJobChain(params)
+	if err != nil {
+		fmt.Printf("[ERROR] Cannot start job_chain: %s \n", err.Text)
+		return
+	}
+	fmt.Printf("[OK] Success starting job_chain: %s \n", job_chain)
 }
 
 func initClient() *jobscheduler.Client {
@@ -36,6 +52,11 @@ func main() {
 		client := initClient()
 		StartJob(client, job, "")
 	case "start_job_chain":
+		job_chain := os.Args[2]
+		os.Args = os.Args[2:]
+		parseOption()
+		client := initClient()
+		StartJobChain(client, job_chain, "")
 	case "order":
 	case "schedule":
 	case "process_class":
